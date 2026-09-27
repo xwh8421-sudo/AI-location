@@ -1,6 +1,7 @@
 """FastAPI 入口：提供前端页面与检测接口。"""
 from pathlib import Path
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -11,6 +12,9 @@ from .schemas import AnalyzeRequest, ShotIn
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_DIR = BASE_DIR / "static"
+
+# 自动读取项目根目录下的 .env（已存在的系统环境变量优先）
+load_dotenv(BASE_DIR / ".env", override=False)
 
 app = FastAPI(title="AI-location 分镜连续性检测")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
