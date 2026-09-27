@@ -8,7 +8,7 @@ const state = {
 };
 const SETTINGS_KEY = "ai_location_settings";
 const settings = Object.assign(
-  { base_url: "", model: "gpt-4o", api_key: "" },
+  { base_url: "https://open.bigmodel.cn/api/paas/v4", model: "glm-4.6v-flash", api_key: "" },
   JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}")
 );
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI-location · 分镜连续性检测</title>
-  <link rel="stylesheet" href="/static/style.css?v=3" />
+  <link rel="stylesheet" href="/static/style.css?v=4" />
 </head>
 <body>
   <header class="topbar">
@@ -89,7 +89,9 @@
     <div class="modal-mask"></div>
     <div class="modal-body">
       <h3>多模态模型 API 设置</h3>
-      <p class="modal-tip">设置只保存在你本机浏览器（localStorage），用于后端调用。支持所有 OpenAI 兼容接口。</p>
+      <p class="modal-tip">设置只保存在你本机浏览器（localStorage），用于后端调用。支持所有 OpenAI 兼容接口。
+        没有 Key？用手机号在 <a href="https://bigmodel.cn" target="_blank" rel="noopener">bigmodel.cn</a> 免费注册，
+        在「API 密钥」页创建即可，<b>GLM-4.6V-Flash 视觉模型免费</b>，点下方预设一键填入。</p>
       <label>API Base URL</label>
       <input id="cfgBaseUrl" type="text" placeholder="https://api.openai.com/v1" />
       <label>模型名称</label>
@@ -97,9 +99,10 @@
       <label>API Key</label>
       <input id="cfgApiKey" type="password" placeholder="sk-..." />
       <div class="modal-presets">
-        <span>快捷示例：</span>
-        <button class="preset" data-base="https://api.openai.com/v1" data-model="gpt-4o">OpenAI · gpt-4o</button>
+        <span>快捷预设：</span>
+        <button class="preset" data-base="https://open.bigmodel.cn/api/paas/v4" data-model="glm-4.6v-flash">智谱 GLM-4.6V-Flash（免费·推荐）</button>
         <button class="preset" data-base="https://dashscope.aliyuncs.com/compatible-mode/v1" data-model="qwen-vl-max">通义千问 · qwen-vl-max</button>
+        <button class="preset" data-base="https://api.openai.com/v1" data-model="gpt-4o">OpenAI · gpt-4o</button>
       </div>
       <div class="modal-actions">
         <button id="cfgCancel" class="btn btn-sub btn-sm">取消</button>
@@ -111,6 +114,6 @@
   <div id="toast" class="toast" hidden></div>
   <div id="loading" class="loading" hidden><div class="spinner"></div><span id="loadingText">正在分析镜头…</span></div>
 
-  <script src="/static/app.js?v=3"></script>
+  <script src="/static/app.js?v=4"></script>
 </body>
 </html>

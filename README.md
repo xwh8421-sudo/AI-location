@@ -41,9 +41,12 @@
 
 - Python 3.10+
 - 一个支持视觉理解的多模态模型 API（OpenAI 兼容接口即可），例如：
-  - OpenAI：`gpt-4o`、`gpt-4o-mini`
+  - **智谱 `glm-4.6v-flash`（免费，国内直连，推荐）**：在 [bigmodel.cn](https://bigmodel.cn) 用手机号注册后，到「API 密钥」页创建 Key 即可，无需充值
   - 通义千问：`qwen-vl-max`、`qwen-vl-latest`
+  - OpenAI：`gpt-4o`、`gpt-4o-mini`（需要可访问 api.openai.com 的网络）
   - 其他自建 / 第三方 OpenAI 兼容服务
+
+> 💡 没有独立显卡的电脑不建议本地跑视觉模型（CPU 推理很慢），用上面的免费云端模型即可。
 
 ---
 
@@ -73,17 +76,23 @@ pip install -r requirements.txt
 
 **方式 A：网页里配置（推荐）**
 
-启动后点击页面右上角「⚙ API 设置」，填入 Base URL、模型名、API Key 即可；弹窗内有 OpenAI / 通义千问的快捷预设。设置仅保存在当前浏览器。
+启动后点击页面右上角「⚙ API 设置」：
+
+1. 到 [bigmodel.cn](https://bigmodel.cn) 用手机号注册并登录，进入「控制台 → API 密钥」创建一个 Key（免费）；
+2. 回到本页弹窗，点「**智谱 GLM-4.6V-Flash（免费·推荐）**」预设，Base URL 和模型名会自动填好；
+3. 粘贴你的 API Key → 保存。
+
+设置仅保存在当前浏览器。也可以改用通义千问 / OpenAI 等其他 OpenAI 兼容接口（弹窗内有预设）。
 
 **方式 B：环境变量 / .env 文件**
 
 复制 `.env.example` 为 `.env` 并填写（也可直接设置同名系统环境变量）：
 
 ```bash
-# OpenAI 官方
-OPENAI_API_KEY=sk-xxxx
-OPENAI_BASE_URL=https://api.openai.com/v1
-MODEL_NAME=gpt-4o
+# 智谱 GLM-4.6V-Flash（免费）
+OPENAI_API_KEY=你的智谱APIKey
+OPENAI_BASE_URL=https://open.bigmodel.cn/api/paas/v4
+MODEL_NAME=glm-4.6v-flash
 
 # 通义千问 VL（OpenAI 兼容模式）
 # OPENAI_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
