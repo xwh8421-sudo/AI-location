@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-location · 分镜连续性检测</title>
+  <link rel="stylesheet" href="/static/style.css?v=3" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-logo">🎬</span>
+      <div>
+        <div class="brand-title">AI-location</div>
+        <div class="brand-sub">分镜人物站位 · 越轴 · 动作衔接 检测</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <span id="apiStatus" class="api-status" title="当前 API 配置状态">未配置 API</span>
+      <button id="settingsBtn" class="btn btn-ghost btn-sm">⚙ API 设置</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- 左侧：镜头录入 -->
+    <section class="panel input-panel">
+      <div class="panel-head">
+        <h2>镜头序列 <span id="shotCount" class="count-badge">0</span></h2>
+        <div class="head-actions">
+          <button id="demoBtn" class="btn btn-sub btn-sm">载入示例</button>
+          <button id="clearBtn" class="btn btn-sub btn-sm">清空</button>
+        </div>
+      </div>
+
+      <ol id="shotList" class="shot-list"></ol>
+
+      <div id="emptyHint" class="empty-hint">
+        <div class="empty-icon">🎞️</div>
+        <p>还没有镜头。可以粘贴 <b>视频 Prompt 文本</b>、上传 <b>分镜故事板图片</b>，<br />或点上方「载入示例」快速体验。</p>
+      </div>
+
+      <div class="composer">
+        <label class="composer-label">粘贴一段视频 prompt，添加文本镜头：</label>
+        <textarea id="promptInput" rows="3" placeholder="例：中景，平视，角色A位于画面左侧、面朝右，坐在咖啡馆桌前说话……"></textarea>
+        <button id="addTextBtn" class="btn btn-sub btn-sm">＋ 添加为镜头</button>
+      </div>
+
+      <div class="uploader">
+        <button id="addImgBtn" class="btn btn-sub btn-sm">🖼 添加分镜图片</button>
+        <input id="imgInput" type="file" accept="image/*" multiple hidden />
+        <span class="uploader-hint">支持一次多选，每张图按选择顺序成为一个镜头</span>
+      </div>
+
+      <button id="runBtn" class="btn btn-primary btn-block">开始检测（站位 / 越轴 / 动作衔接）</button>
+    </section>
+
+    <!-- 右侧：检测报告 -->
+    <section class="panel report-panel">
+      <div id="reportEmpty" class="report-empty">
+        <div class="empty-icon big">📽️</div>
+        <h3>检测报告将显示在这里</h3>
+        <p>每个镜头会先由多模态大模型解析出人物位置、朝向、服装、道具与起止动作，<br />再由轴线规则引擎与连续性检查输出越轴、站位、动作、服装、道具的问题清单和修改建议。</p>
+      </div>
+
+      <div id="report" class="report" hidden>
+        <div class="stats" id="stats"></div>
+
+        <section class="report-section">
+          <h3><span class="dot dot-red"></span>问题清单</h3>
+          <div id="issues"></div>
+        </section>
+
+        <section class="report-section">
+          <h3><span class="dot dot-indigo"></span>站位 / 轴线示意图</h3>
+          <p class="section-hint">圆圈为人物在画面中的水平位置，箭头为朝向；虚线为两人的关系轴线，红色描边表示该镜头存在越轴。</p>
+          <div id="diagram" class="diagram-scroll"></div>
+        </section>
+
+        <section class="report-section">
+          <h3><span class="dot dot-slate"></span>镜头解析明细</h3>
+          <div id="shotDetails" class="shot-details"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <!-- API 设置弹窗 -->
+  <div id="settingsModal" class="modal" hidden>
+    <div class="modal-mask"></div>
+    <div class="modal-body">
+      <h3>多模态模型 API 设置</h3>
+      <p class="modal-tip">设置只保存在你本机浏览器（localStorage），用于后端调用。支持所有 OpenAI 兼容接口。</p>
+      <label>API Base URL</label>
+      <input id="cfgBaseUrl" type="text" placeholder="https://api.openai.com/v1" />
+      <label>模型名称</label>
+      <input id="cfgModel" type="text" placeholder="gpt-4o" />
+      <label>API Key</label>
+      <input id="cfgApiKey" type="password" placeholder="sk-..." />
+      <div class="modal-presets">
+        <span>快捷示例：</span>
+        <button class="preset" data-base="https://api.openai.com/v1" data-model="gpt-4o">OpenAI · gpt-4o</button>
+        <button class="preset" data-base="https://dashscope.aliyuncs.com/compatible-mode/v1" data-model="qwen-vl-max">通义千问 · qwen-vl-max</button>
+      </div>
+      <div class="modal-actions">
+        <button id="cfgCancel" class="btn btn-sub btn-sm">取消</button>
+        <button id="cfgSave" class="btn btn-primary btn-sm">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+  <div id="loading" class="loading" hidden><div class="spinner"></div><span id="loadingText">正在分析镜头…</span></div>
+
+  <script src="/static/app.js?v=3"></script>
+</body>
+</html>
